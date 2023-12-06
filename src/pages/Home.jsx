@@ -1,16 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import MapElement from '../components/maps.component';
+import { useEffect, useRef, useState } from "react";
+import MapElement from "../components/maps.component";
 
 export default function Home() {
-
   const [location, setLocation] = useState(null);
 
   useEffect(() => {
     if (!location) {
       getLocation();
     }
-
-  }, [location])
+  }, [location]);
 
   function getLocation() {
     if (navigator.geolocation) {
@@ -31,14 +29,16 @@ export default function Home() {
     console.log("Unable to retrieve your location");
   }
 
-
-  return <div className="flex w-full justify-center">
-    {
-      location ?
-        <MapElement latitude={location.latitude} longitude={location.longitude} />
-        :
+  return (
+    <div className="flex w-full justify-center">
+      {location ? (
+        <MapElement
+          latitude={location.latitude}
+          longitude={location.longitude}
+        />
+      ) : (
         <div className="flex">Fetching Local Coordinates</div>
-    }
-
-  </div>;
+      )}
+    </div>
+  );
 }
