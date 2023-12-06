@@ -1,33 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import MapElement from "../components/maps.component";
+import { LocationContext } from "../contexts/locationContext.context";
 
 export default function Home() {
-  const [location, setLocation] = useState(null);
-
-  useEffect(() => {
-    if (!location) {
-      getLocation();
-    }
-  }, [location]);
-
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error);
-    } else {
-      console.log("Geolocation not supported");
-    }
-  }
-
-  function success(position) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    setLocation({ latitude, longitude });
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-  }
-
-  function error() {
-    console.log("Unable to retrieve your location");
-  }
+  const location = useContext(LocationContext);
 
   return (
     <div className="flex w-full justify-center">

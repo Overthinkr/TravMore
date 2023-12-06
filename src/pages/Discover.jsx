@@ -1,9 +1,13 @@
+import axios from "axios";
 import {
   motion,
   useMotionValue,
   useTransform,
   useAnimation,
 } from "framer-motion";
+import { useContext, useEffect, useState } from "react";
+import { LocationContext } from "../contexts/locationContext.context";
+import LocationTag from "../components/discover/LocationTag.component";
 
 const Card = ({ title, distance, location, image }) => {
   const x = useMotionValue(0);
@@ -122,15 +126,66 @@ export default function Discover() {
     },
   ];
 
-  return cards.map((card, index) => {
-    return (
-      <Card
-        key={index}
-        title={card.title}
-        distance={card.distance}
-        location={card.location}
-        image={card.image}
-      />
-    );
-  });
+  const [footerHeight, setFooterHeight] = useState();
+  const [headerHeight, setHeaderHeight] = useState();
+  const [wrapperWidth, setWrapperWidth] = useState();
+
+  const location = useContext(LocationContext);
+
+
+  useEffect(() => {
+    const footer = document.querySelector('.footer');
+    const header = document.querySelector('.header');
+    const wrapper = document.querySelector('.discover-wrapper');
+    if (footer) {
+      setFooterHeight(footer.clientHeight);
+    }
+    if (header) {
+      setHeaderHeight(header.clientHeight);
+    }
+    if (wrapper) {
+      setWrapperWidth(wrapper.clientWidth);
+    }
+  }, [])
+
+  console.log(wrapperWidth)
+
+  useEffect(() => {
+    if (location?.latitude == null) return;
+    // axios.get(`https://browse.search.hereapi.com/v1/browse?at=${location.latitude},${location.longitude}&limit=20&lang=en&apiKey=${import.meta.env.VITE_APIKEY}`).then((res) => {
+    //   console.log(res.data)
+    // })
+  }, [location])
+
+  return (
+    <div className="flex w-full justify-center rounded-xl overflow-hidden" style={{ height: `calc(100vh - ${footerHeight + headerHeight}px)` }}>
+      <div className="flex discover-wrapper max-w-md justify-between flex-col w-full rounded-xl overflow-hidden">
+        {/* Controls, Categories etc */}
+        <div className="absolute flex gap-2 my-2 ml-2 overflow-x-scroll location-tags-discover items-center" style={{maxWidth: `${wrapperWidth}px`}}>
+          <LocationTag text={"Restaurants"} />
+          <LocationTag text={"Hotels"} />
+          <LocationTag text={"Fast Food"} />
+          <LocationTag text={"Shops"} />
+          <LocationTag text={"Shops"} />
+          <LocationTag text={"Shops"} />
+          <LocationTag text={"Shops"} />
+          <LocationTag text={"Shops"} />
+        </div>
+
+
+        {/* Image */}
+        <div className="flex h-full bg-cover">
+          <img src="https://source.unsplash.com/featured/?buckingham-palace" />
+        </div>
+
+        {/* Footer */}
+        <div className="flex bg-white text-black font-medium p-5">
+          <div className="flex w-full justify-between">
+            <span>Negawat</span>
+            <span>5 Star Cuh</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
