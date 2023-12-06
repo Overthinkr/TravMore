@@ -8,6 +8,8 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { LocationContext } from "../contexts/locationContext.context";
 import LocationTag from "../components/discover/LocationTag.component";
+import { browseResponse, calculateDistance } from "../helpers/BrowseAPI.helper";
+import DiscoverCard from "../components/discover/Card.component";
 
 const Card = ({ title, distance, location, image }) => {
   const x = useMotionValue(0);
@@ -129,6 +131,7 @@ export default function Discover() {
   const [footerHeight, setFooterHeight] = useState();
   const [headerHeight, setHeaderHeight] = useState();
   const [wrapperWidth, setWrapperWidth] = useState();
+  const [wrapperHeight, setWrapperHeight] = useState();
 
   const location = useContext(LocationContext);
 
@@ -145,23 +148,24 @@ export default function Discover() {
     }
     if (wrapper) {
       setWrapperWidth(wrapper.clientWidth);
+      setWrapperHeight(wrapper.clientHeight);
     }
   }, [])
 
-  console.log(wrapperWidth)
-
   useEffect(() => {
     if (location?.latitude == null) return;
-    // axios.get(`https://browse.search.hereapi.com/v1/browse?at=${location.latitude},${location.longitude}&limit=20&lang=en&apiKey=${import.meta.env.VITE_APIKEY}`).then((res) => {
+    // axios.get(`https://browse.search.hereapi.com/v1/browse?at=${location.latitude},${location.longitude}&categories=100-1000-0000&limit=20&lang=en&apiKey=${import.meta.env.VITE_APIKEY}`).then((res) => {
     //   console.log(res.data)
     // })
   }, [location])
+
+  const bResponse = browseResponse;
 
   return (
     <div className="flex w-full justify-center rounded-xl overflow-hidden" style={{ height: `calc(100vh - ${footerHeight + headerHeight}px)` }}>
       <div className="flex discover-wrapper max-w-md justify-between flex-col w-full rounded-xl overflow-hidden">
         {/* Controls, Categories etc */}
-        <div className="absolute flex gap-2 my-2 ml-2 overflow-x-scroll location-tags-discover items-center" style={{maxWidth: `${wrapperWidth}px`}}>
+        <div className="absolute flex gap-2 my-2 ml-2 overflow-x-scroll location-tags-discover items-center" style={{ maxWidth: `${wrapperWidth}px` }}>
           <LocationTag text={"Restaurants"} />
           <LocationTag text={"Hotels"} />
           <LocationTag text={"Fast Food"} />
@@ -171,19 +175,12 @@ export default function Discover() {
           <LocationTag text={"Shops"} />
           <LocationTag text={"Shops"} />
         </div>
-
-
-        {/* Image */}
-        <div className="flex h-full bg-cover">
-          <img src="https://source.unsplash.com/featured/?buckingham-palace" />
-        </div>
-
-        {/* Footer */}
-        <div className="flex bg-white text-black font-medium p-5">
-          <div className="flex w-full justify-between">
-            <span>Negawat</span>
-            <span>5 Star Cuh</span>
-          </div>
+        <div className="flex flex-col overflow-y-scroll">
+          {
+            bResponse.map((responseData) => {
+              return <DiscoverCard locationData={responseData} location={location} wrapperHeight={wrapperHeight} />
+            })
+          }
         </div>
       </div>
     </div>
