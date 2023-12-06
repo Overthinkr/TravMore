@@ -8,6 +8,7 @@ import Companion from "./pages/companion";
 import Discover from "./pages/discover";
 import Invest from "./pages/invest";
 import Profile from "./pages/profile";
+import { LocationContextProvider } from "./contexts/locationContext.context";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -24,5 +25,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <LocationContextProvider>
+    <RouterProvider router={router} />
+  </LocationContextProvider>
 );
