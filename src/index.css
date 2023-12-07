@@ -90,3 +90,7 @@ button:focus-visible {
 .location-tags-discover::-webkit-scrollbar {
   display: none;
 }
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
