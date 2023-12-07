@@ -154,15 +154,29 @@ export default function Discover() {
 
   useEffect(() => {
     if (location?.latitude == null) return;
-    // axios.get(`https://browse.search.hereapi.com/v1/browse?at=${location.latitude},${location.longitude}&categories=100-1000-0000&limit=20&lang=en&apiKey=${import.meta.env.VITE_APIKEY}`).then((res) => {
+    // axios.get(`https://browse.search.hereapi.com/v1/browse?at=${location.latitude},${location.longitude}&categories=100-1000-0000&limit=100&lang=en&apiKey=${import.meta.env.VITE_APIKEY}`).then((res) => {
     //   console.log(res.data)
     // })
   }, [location])
 
   const bResponse = browseResponse;
 
+  const [currentShort, setCurrentShort] = useState(0);
+
+  function shortsNext() {
+    setCurrentShort((e) => e + 1);
+  }
+  function shortsBefore() {
+    setCurrentShort((e) => e - 1);
+  }
+
+  useEffect(() => {
+    const element = document.querySelector(`#data-id-${currentShort}`);
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [currentShort])
+
   return (
-    <div className="flex w-full justify-center rounded-xl overflow-hidden" style={{ height: `calc(100vh - ${footerHeight + headerHeight}px)` }}>
+    <div className="flex w-full justify-center rounded-xl overflow-hidden select-none" style={{ height: `calc(100vh - ${footerHeight + headerHeight}px)` }}>
       <div className="flex discover-wrapper max-w-md justify-between flex-col w-full rounded-xl overflow-hidden">
         {/* Controls, Categories etc */}
         <div className="absolute flex gap-2 my-2 ml-2 overflow-x-scroll location-tags-discover items-center" style={{ maxWidth: `${wrapperWidth}px` }}>
@@ -175,10 +189,10 @@ export default function Discover() {
           <LocationTag text={"Shops"} />
           <LocationTag text={"Shops"} />
         </div>
-        <div className="flex flex-col overflow-y-scroll">
+        <div className="flex flex-col overflow-hidden">
           {
-            bResponse.map((responseData) => {
-              return <DiscoverCard locationData={responseData} location={location} wrapperHeight={wrapperHeight} />
+            bResponse.map((responseData, index) => {
+              return <DiscoverCard key={index} ID={index} locationData={responseData} location={location} wrapperHeight={wrapperHeight} next={shortsNext} before = {shortsBefore} />
             })
           }
         </div>
