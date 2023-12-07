@@ -90,18 +90,35 @@ export default function MapElement({ latitude, longitude }) {
     return (
         <Fragment>
             <motion.div
-                className="absolute flex select-none cursor-pointer z-10 gap-2">
-                <motion.span className="bg-black p-3 rounded-xl mt-4" onClick={searchArea} whileHover={{
-                    scale: 1.05,
-                    transition: { duration: .3 },
-                }}
-                    whileTap={{ scale: 0.9 }}>Search This Area</motion.span>
-                <motion.span whileHover={{
-                    scale: 1.05,
-                    transition: { duration: .3 },
-                }}
-                    whileTap={{ scale: 0.9 }}
-                    className="bg-black p-3 rounded-xl mt-4" onClick={clearRestaurants}>X</motion.span>
+                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2">
+                <div className="flex gap-2">
+                    <motion.span className="bg-black p-3 rounded-xl mt-4" onClick={searchArea} whileHover={{
+                        scale: 1.05,
+                        transition: { duration: .3 },
+                    }}
+                        whileTap={{ scale: 0.9 }}>Search This Area</motion.span>
+                    <motion.span whileHover={{
+                        scale: 1.05,
+                        transition: { duration: .3 },
+                    }}
+                        whileTap={{ scale: 0.9 }}
+                        className="bg-black p-3 rounded-xl mt-4" onClick={clearRestaurants}>X
+                    </motion.span>
+                </div>
+
+
+                <div className="flex bg-black">
+                    Items
+                    {
+                        restaurants &&
+                        restaurants.map((restaurant) => {
+                            return <div className="flex">
+                                {restaurant.title}
+                            </div>
+                        })
+                    }
+                </div>
+
             </motion.div>
             <div className='absolute' style={{ width: "100%", height: "80vh" }} ref={mapRef} />
         </Fragment>
