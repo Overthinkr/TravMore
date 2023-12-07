@@ -15,6 +15,8 @@ export default function MapElement({ latitude, longitude }) {
 
     const [restaurants, setRestaurants] = useState();
 
+    console.log(restaurants)
+
     function searchArea() {
         const { lat, lng } = map.current.getCenter()
         axios.get(`https://browse.search.hereapi.com/v1/browse?at=${lat},${lng}&limit=100&categories=100-1000-0000&apiKey=${apikey}`).then((res) => {
@@ -107,17 +109,17 @@ export default function MapElement({ latitude, longitude }) {
                 </div>
 
 
-                <div className="flex bg-black">
+                {/* <div className="flex bg-black">
                     Items
                     {
                         restaurants &&
-                        restaurants.map((restaurant) => {
+                        Object.keys(restaurants).map((restaurant) => {
                             return <div className="flex">
-                                {restaurant.title}
+                                {restaurants[restaurant].title}
                             </div>
                         })
                     }
-                </div>
+                </div> */}
 
             </motion.div>
             <div className='absolute' style={{ width: "100%", height: "80vh" }} ref={mapRef} />
