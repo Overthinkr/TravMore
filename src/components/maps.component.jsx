@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import RestIcon from "../assets/restaurant-icon.svg";
 import { motion } from "framer-motion";
+import ResultDisplay from './home/resultsDisplay.component';
 
 export default function MapElement({ latitude, longitude }) {
     const mapRef = useRef(null);
@@ -15,7 +16,7 @@ export default function MapElement({ latitude, longitude }) {
 
     const [restaurants, setRestaurants] = useState();
 
-    console.log(restaurants)
+    const [showResults, setShowResults] = useState(false);
 
     function searchArea() {
         const { lat, lng } = map.current.getCenter()
@@ -89,37 +90,58 @@ export default function MapElement({ latitude, longitude }) {
         }
 
     }, [restaurants])
+
     return (
         <Fragment>
             <motion.div
-                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2">
+                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2 overflow-hidden" style={{ height: "80vh" }}>
                 <div className="flex gap-2">
                     <motion.span className="bg-black p-3 rounded-xl mt-4" onClick={searchArea} whileHover={{
                         scale: 1.05,
                         transition: { duration: .3 },
                     }}
                         whileTap={{ scale: 0.9 }}>Search This Area</motion.span>
-                    <motion.span whileHover={{
-                        scale: 1.05,
-                        transition: { duration: .3 },
-                    }}
-                        whileTap={{ scale: 0.9 }}
-                        className="bg-black p-3 rounded-xl mt-4" onClick={clearRestaurants}>X
-                    </motion.span>
                 </div>
 
+                {
+                    restaurants &&
+                    Object.keys(restaurants).length > 0 &&
+                    <div className="flex flex-col gap-2 items-center">
 
-                {/* <div className="flex bg-black">
-                    Items
-                    {
-                        restaurants &&
-                        Object.keys(restaurants).map((restaurant) => {
-                            return <div className="flex">
-                                {restaurants[restaurant].title}
+                        <div className="flex items-center gap-2">
+                            <div className="flex bg-black px-4 py-2 rounded-lg" onClick={() => { setShowResults((e) => !e) }}>
+                                {
+                                    showResults ?
+                                        "Close Results" :
+                                        "Click here for Results"
+                                }
+
                             </div>
-                        })
-                    }
-                </div> */}
+                            <motion.span whileHover={{
+                                scale: 1.05,
+                                transition: { duration: .3 },
+                            }}
+                                whileTap={{ scale: 0.9 }}
+                                className="bg-black p-3 rounded-xl" onClick={clearRestaurants}>X
+                            </motion.span>
+                        </div>
+
+
+
+
+                        {
+                            showResults &&
+                            <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(80vh - 8rem)" }}>
+                                {
+                                    restaurants &&
+                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude} />
+                                }
+                            </div>
+                        }
+
+                    </div>
+                }
+
 
             </motion.div>
             <div className='absolute' style={{ width: "100%", height: "80vh" }} ref={mapRef} />
