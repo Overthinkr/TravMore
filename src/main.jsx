@@ -3,11 +3,11 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import "./index.css";
 import Layout from "./layouts/footer.layout";
-import Home from "./pages/home";
-import Companion from "./pages/companion";
-import Discover from "./pages/discover";
-import Invest from "./pages/invest";
-import Profile from "./pages/profile";
+import Home from "./pages/Home";
+import Companion from "./pages/Companion";
+import Discover from "./pages/Discover";
+import Invest from "./pages/Invest";
+import Profile from "./pages/Profile";
 import { LocationContextProvider } from "./contexts/locationContext.context";
 import { createBrowserRouter } from "react-router-dom";
 

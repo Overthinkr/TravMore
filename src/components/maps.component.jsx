@@ -91,10 +91,12 @@ export default function MapElement({ latitude, longitude }) {
 
     }, [restaurants])
 
+    const [categories, setCategories] = useState();
+
     return (
         <Fragment>
             <motion.div
-                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2 overflow-hidden" style={{ height: "80vh" }}>
+                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2 overflow-hidden" style={{ maxHeight: "80vh" }}>
                 <div className="flex gap-2">
                     <motion.span className="bg-black p-3 rounded-xl mt-4" onClick={searchArea} whileHover={{
                         scale: 1.05,
@@ -131,10 +133,10 @@ export default function MapElement({ latitude, longitude }) {
 
                         {
                             showResults &&
-                            <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(80vh - 8rem)" }}>
+                            <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(80vh - 8rem)", maxWidth: "500px" }}>
                                 {
                                     restaurants &&
-                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude} />
+                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude}/>
                                 }
                             </div>
                         }
