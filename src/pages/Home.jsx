@@ -6,7 +6,7 @@ export default function Home() {
   const location = useContext(LocationContext);
 
   return (
-    <div className="flex w-full justify-center">
+    <div className="flex w-full justify-center overflow-hidden">
       {location ? (
         <MapElement
           latitude={location.latitude}
