@@ -7,9 +7,7 @@ export default function Footer() {
         <span className="material-symbols-outlined">account_circle</span>
       </header>
 
-
       <Outlet />
-
 
       <div className="flex fixed bottom-0 w-full justify-center footer">
         <nav className="flex justify-between my-6 w-full max-w-3xl items-center px-5">
@@ -36,11 +34,18 @@ export default function Footer() {
             to="/invest"
             className="flex flex-col items-center cursor-pointer text-cyan-300 hover:text-white"
           >
-            <span className="material-symbols-outlined">add_business</span>Invest
+            <span className="material-symbols-outlined">add_business</span>
+            Invest
+          </NavLink>
+          <NavLink
+            to="/forum"
+            className="flex flex-col items-center cursor-pointer text-cyan-300 hover:text-white"
+          >
+            <span className="material-symbols-outlined">forum</span>
+            Forum
           </NavLink>
         </nav>
       </div>
-
     </div>
   );
 }

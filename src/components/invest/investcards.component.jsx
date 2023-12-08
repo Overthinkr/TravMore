@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function Investcard({ location, country, description }) {
   return (
     <>
