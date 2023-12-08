@@ -3,29 +3,29 @@ import Investcard from "../components/invest/investcards.component";
 export default function Invest() {
   let locations = [
     {
-      location: "Bhutan",
+      location: "Small City 1",
       country: "Asia",
-      description: "Bhutan is a country in South Asia",
+      description: "Small City 1",
     },
     {
-      location: "Bhutan",
+      location: "Small City 1",
       country: "Asia",
-      description: "Bhutan is a country in South Asia",
+      description: "Small City 1",
     },
     {
-      location: "Bhutan",
+      location: "Small City 1",
       country: "Asia",
-      description: "Bhutan is a country in South Asia",
+      description: "Small City 1",
     },
     {
-      location: "Bhutan",
+      location: "Small City 1",
       country: "Asia",
-      description: "Bhutan is a country in South Asia",
+      description: "Small City 1",
     },
     {
-      location: "Bhutan",
+      location: "Small City 1",
       country: "Asia",
-      description: "Bhutan is a country in South Asia",
+      description: "Small City 1",
     },
   ];
 
@@ -38,16 +38,17 @@ export default function Invest() {
           them grow
         </p>
       </div>
-      <div>
+      <div className="flex justify-center w-full flex-col gap-6 mt-6 overflow-y-scroll">
         {locations &&
           locations.map((location, index) => {
-            console.log(location);
-            <Investcard
-              key={index}
-              location={location.location}
-              country={location.country}
-              description={location.description}
-            />;
+            return (
+              <Investcard
+                key={index}
+                location={location.location}
+                country={location.country}
+                description={location.description}
+              />
+            );
           })}
       </div>
     </div>
