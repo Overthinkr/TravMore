@@ -94,3 +94,13 @@ button:focus-visible {
 .overlay {
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+.Dropdown-control {
+  color: white !important;
+  background-color: #000 !important;
+}
+
+.Dropdown-menu {
+  color: white !important;
+  background-color: #000 !important;
+}
