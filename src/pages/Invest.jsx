@@ -62,11 +62,10 @@ export default function Invest() {
       country: "Asia",
       description: "Small City 1",
     },
-    
   ];
 
   return (
-    <div className="m-auto mx-8 flex justify-center flex-col">
+    <div className="m-auto mx-8 flex justify-center flex-col mt-14">
       <div className="flex justify-center flex-col gap-4">
         <h1 className="text-xl font-bold">Up and coming tourist spots....</h1>
         <p className="text-md">
