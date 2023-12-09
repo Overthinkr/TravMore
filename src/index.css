@@ -98,6 +98,7 @@ button:focus-visible {
 .Dropdown-control {
   color: white !important;
   background-color: #000 !important;
+  width: 200px !important;
 }
 
 .Dropdown-menu {

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import ResultDisplay from './home/resultsDisplay.component';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import { optionsHelper } from '../helpers/Home.helper';
+import { TimeCalculate, optionsHelper } from '../helpers/Home.helper';
 
 export default function MapElement({ latitude, longitude }) {
     const mapRef = useRef(null);
@@ -25,6 +25,8 @@ export default function MapElement({ latitude, longitude }) {
     const [searchLink, setLink] = useState("");
 
     const [routingEnabled, setRoutingEnabled] = useState(false);
+    // const [routingDest, setRoutingDest] = useState();
+    // const [routingTime, setRoutingTime] = useState({});
 
     function searchArea() {
         if (searchLink === "") return;
@@ -65,8 +67,9 @@ export default function MapElement({ latitude, longitude }) {
 
     var destination = { lat: latitude, lng: longitude };
 
-    const onResult = function (result, lat, lng) {
+    const onResult = function (result) {
         if (result.routes.length) {
+            console.log(result)
             const lineStrings = [];
             result.routes[0].sections.forEach((section) => {
                 lineStrings.push(H.geo.LineString.fromFlexiblePolyline(section.polyline));
@@ -94,6 +97,7 @@ export default function MapElement({ latitude, longitude }) {
                 bounds: routingGroup.current.getBoundingBox()
             });
 
+            // setRoutingTime({ arrival: result.routes[0].sections[0].arrival.time, departure: result.routes[0].sections[0].departure.time });
             setRoutingEnabled(true);
         };
     };
@@ -177,7 +181,7 @@ export default function MapElement({ latitude, longitude }) {
                         scale: 1.05,
                         transition: { duration: .3 },
                     }}
-                        whileTap={{ scale: 0.9 }}><span class="material-symbols-outlined">search</span></motion.span>
+                        whileTap={{ scale: 0.9 }}><span className="material-symbols-outlined">search</span></motion.span>
                     {
                         routingEnabled &&
                         <motion.span whileHover={{
@@ -225,6 +229,17 @@ export default function MapElement({ latitude, longitude }) {
                                 }
                             </div>
                         }
+
+                        {/* {
+                            routingEnabled &&
+                            <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(80vh - 8rem)", maxWidth: "500px" }}>
+                                <span>Destination: <span className=''></span></span>
+                                {
+                                    routingTime.arrival &&
+                                    <span>{TimeCalculate(routingTime.arrival, routingTime.destination)}</span>
+                                }
+                            </div>
+                        } */}
 
                     </div>
                 }

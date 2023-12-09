@@ -21,3 +21,31 @@ export const optionsHelper = [
         ]
     }
 ];
+
+export function TimeCalculate(timeString1, timeString2) {
+
+    const date1 = new Date(timeString1);
+    const date2 = new Date(timeString2);
+
+    
+
+    const timeDifferenceMillis = Math.abs(date2.getTime() - date1.getTime());
+    console.log((date1.getTime() - date2.getTime()) / 1000)
+
+    const minutesDifference = Math.floor(timeDifferenceMillis / (1000 * 60));
+    const hoursDifference = Math.floor(timeDifferenceMillis / (1000 * 60 * 60));
+
+    let difference;
+    let unit;
+    if (minutesDifference < 60) {
+        difference = minutesDifference;
+        unit = "mins";
+    } else {
+        difference = hoursDifference;
+        unit = "hours";
+    }
+    console.log(minutesDifference)
+    console.log(difference)
+
+    return `${difference} ${unit}`;
+}
