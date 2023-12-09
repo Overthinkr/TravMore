@@ -27,6 +27,42 @@ export default function Invest() {
       country: "Asia",
       description: "Small City 1",
     },
+    {
+      location: "Small City 1",
+      country: "Asia",
+      description: "Small City 1",
+    },
+    {
+      location: "Small City 1",
+      country: "Asia",
+      description: "Small City 1",
+    },
+    {
+      location: "Small City 1",
+      country: "Asia",
+      description: "Small City 1",
+    },
+    {
+      location: "Small City 1",
+      country: "Asia",
+      description: "Small City 1",
+    },
+    {
+      location: "Small City 1",
+      country: "Asia",
+      description: "Small City 1",
+    },
+    {
+      location: "Small City 1",
+      country: "Asia",
+      description: "Small City 1",
+    },
+    {
+      location: "Small City 1",
+      country: "Asia",
+      description: "Small City 1",
+    },
+    
   ];
 
   return (
@@ -38,7 +74,7 @@ export default function Invest() {
           them grow
         </p>
       </div>
-      <div className="flex justify-center w-full flex-col gap-6 mt-6 overflow-y-scroll">
+      <div className="flex justify-center w-full flex-wrap gap-6 mt-6 overflow-y-scroll">
         {locations &&
           locations.map((location, index) => {
             return (

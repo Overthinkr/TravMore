@@ -20,8 +20,8 @@ export default function DiscoverCard({ locationData, location, wrapperHeight, ID
                 </div>
 
                 <div className="flex text-xs gap-2">
-                    {locationData.foodTypes.map((type) => {
-                        return <div className="flex px-3 py-1 rounded-md" style={{ border: `2px solid #4169E1` }}>
+                    {locationData.foodTypes.map((type, idx) => {
+                        return <div key={idx} className="flex px-3 py-1 rounded-md" style={{ border: `2px solid #4169E1` }}>
                             {type.name}
                         </div>
                     })}
