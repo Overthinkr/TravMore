@@ -29,7 +29,7 @@ export default function Forum() {
   };
 
   return (
-    <div className="flex flex-col gap-7 items-center mx-auto  overflow-hidden max-w-2xl w-full align-middle justify-center">
+    <div className="flex flex-col gap-7 items-center mx-auto  overflow-hidden max-w-2xl w-full align-middle justify-center mt-14">
       <div className="flex flex-row items-center w-full justify-between">
         <button
           className="rounded-2xl bg-black flex"
