@@ -83,9 +83,6 @@ button:focus-visible {
   }
 }
 
-.main-wrapper {
-  margin-top: 75px;
-}
 
 .location-tags-discover::-webkit-scrollbar {
   display: none;
@@ -104,4 +101,33 @@ button:focus-visible {
 .Dropdown-menu {
   color: white !important;
   background-color: #000 !important;
+}
+
+textarea {
+  outline: none;
+}
+
+*::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #1e1e24;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #00adb5;
+  border-radius: 8px;
+}
+
+.Dropdown-title{
+  color: gray !important;
+}
+
+.Dropdown-option{
+  color: white !important;
+  font-size: small;
+}
+.Dropdown-option:hover{
+  background-color: inherit !important;
 }

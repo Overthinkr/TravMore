@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import ResultDisplay from './home/resultsDisplay.component';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import { TimeCalculate, optionsHelper } from '../helpers/Home.helper';
+import { optionsHelper } from '../helpers/Home.helper';
+import PlaceInfo from './home/placeInfo.component';
 
 export default function MapElement({ latitude, longitude }) {
     const mapRef = useRef(null);
@@ -25,8 +26,17 @@ export default function MapElement({ latitude, longitude }) {
     const [searchLink, setLink] = useState("");
 
     const [routingEnabled, setRoutingEnabled] = useState(false);
+
+    const [detailsModal, setDetailsModal] = useState();
+    const [displayModal, setDisplayModal] = useState(false);
     // const [routingDest, setRoutingDest] = useState();
     // const [routingTime, setRoutingTime] = useState({});
+
+    function clickPlace(info) {
+        setDisplayModal(true)
+        setShowResults(false);
+        setDetailsModal(info)
+    }
 
     function searchArea() {
         if (searchLink === "") return;
@@ -80,7 +90,7 @@ export default function MapElement({ latitude, longitude }) {
             const routeLine = new H.map.Polyline(multiLineString, {
                 style: {
                     strokeColor: 'blue',
-                    lineWidth: 3
+                    lineWidth: 5
                 }
             });
 
@@ -136,6 +146,14 @@ export default function MapElement({ latitude, longitude }) {
 
                 var ui = H.ui.UI.createDefault(newMap, defaultLayers);
 
+                newMap.addEventListener('pointermove', function (event) {
+                    if (event.target instanceof H.map.Marker) {
+                        newMap.getViewPort().element.style.cursor = 'pointer';
+                    } else {
+                        newMap.getViewPort().element.style.cursor = 'auto';
+                    }
+                }, false);
+
                 window.addEventListener('resize', () => newMap.getViewPort().resize());
                 var currentLocation = new H.map.Circle({ lat: latitude, lng: longitude }, 10);
                 newMap.addObject(currentLocation);
@@ -162,7 +180,11 @@ export default function MapElement({ latitude, longitude }) {
         var icon = new H.map.Icon(RestIcon);
 
         for (const [key, value] of Object.entries(restaurants)) {
-            restaurantGroup.current.addObject(new H.map.Marker({ lat: value.position.lat, lng: value.position.lng }, { icon: icon }))
+            const marker = new H.map.Marker({ lat: value.position.lat, lng: value.position.lng }, { icon: icon });
+            marker.addEventListener("tap", function () {
+                clickPlace(value)
+            })
+            restaurantGroup.current.addObject(marker)
         }
 
     }, [restaurants])
@@ -172,7 +194,7 @@ export default function MapElement({ latitude, longitude }) {
     return (
         <Fragment>
             <motion.div
-                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2" style={{ maxHeight: "80vh" }}>
+                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2" style={{ maxHeight: "90vh" }}>
                 <div className="flex gap-2 mt-3 items-center">
                     <Dropdown options={options} onChange={(e) => { setLink(e.value) }} placeholder="Category" />
 
@@ -222,17 +244,17 @@ export default function MapElement({ latitude, longitude }) {
 
                         {
                             showResults &&
-                            <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(80vh - 8rem)", maxWidth: "500px" }}>
+                            <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(90vh - 8rem)", maxWidth: "500px" }}>
                                 {
                                     restaurants &&
-                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude} search={search} setShowResults={setShowResults} />
+                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude} search={search} setShowResults={setShowResults} clickPlace={clickPlace} />
                                 }
                             </div>
                         }
 
                         {/* {
                             routingEnabled &&
-                            <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(80vh - 8rem)", maxWidth: "500px" }}>
+                            <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(90vh - 8rem)", maxWidth: "500px" }}>
                                 <span>Destination: <span className=''></span></span>
                                 {
                                     routingTime.arrival &&
@@ -244,9 +266,14 @@ export default function MapElement({ latitude, longitude }) {
                     </div>
                 }
 
+                {
+                    displayModal &&
+                    <PlaceInfo info={detailsModal} findDirections={search} latitude={latitude} longitude={longitude} setDisplayModal={setDisplayModal} setDetailsModal={setDetailsModal} setShowResults={setShowResults} />
+                }
+
 
             </motion.div>
-            <div className='absolute' style={{ width: "100%", height: "80vh" }} ref={mapRef} />
+            <div className='absolute' style={{ width: "100%", height: "90vh" }} ref={mapRef} />
         </Fragment>
     )
 }

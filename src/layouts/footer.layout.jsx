@@ -3,10 +3,6 @@ import { NavLink, Outlet } from "react-router-dom";
 export default function Footer() {
   return (
     <div className="flex flex-col main-wrapper w-full">
-      <header className="fixed cursor-pointer top-0 right-0 py-5 px-8 text-xl header">
-        <span className="material-symbols-outlined">account_circle</span>
-      </header>
-
       <Outlet />
 
       <div className="flex fixed bottom-0 w-full justify-center footer">
