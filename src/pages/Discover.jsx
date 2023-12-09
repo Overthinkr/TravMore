@@ -7,7 +7,6 @@ import DiscoverCard from "../components/discover/Card.component";
 
 export default function Discover() {
   const [footerHeight, setFooterHeight] = useState();
-  const [headerHeight, setHeaderHeight] = useState();
   const [wrapperWidth, setWrapperWidth] = useState();
   const [wrapperHeight, setWrapperHeight] = useState();
 
@@ -15,13 +14,9 @@ export default function Discover() {
 
   useEffect(() => {
     const footer = document.querySelector(".footer");
-    const header = document.querySelector(".header");
     const wrapper = document.querySelector(".discover-wrapper");
     if (footer) {
       setFooterHeight(footer.clientHeight);
-    }
-    if (header) {
-      setHeaderHeight(header.clientHeight);
     }
     if (wrapper) {
       setWrapperWidth(wrapper.clientWidth);
@@ -55,7 +50,7 @@ export default function Discover() {
   return (
     <div
       className="flex w-full justify-center rounded-xl overflow-hidden select-none"
-      style={{ height: `calc(100vh - ${footerHeight + headerHeight}px)` }}
+      style={{ height: `calc(100vh - ${footerHeight}px)` }}
     >
       <div className="flex discover-wrapper max-w-md justify-between flex-col w-full rounded-xl overflow-hidden">
         {/* Controls, Categories etc */}

@@ -21,7 +21,7 @@ export default function PlaceInfo({ info, latitude, longitude, setDetailsModal, 
     if (!info) return;
 
     return (
-        <div className="flex flex-col w-full bg-black p-4 rounded-lg overflow-y-auto" style={{ maxHeight: "calc(80vh - 8rem)", maxWidth: "500px" }}>
+        <div className="flex flex-col w-full bg-black p-4 rounded-lg overflow-y-auto" style={{ maxHeight: "calc(90vh - 8rem)", maxWidth: "500px" }}>
             <div className="flex justify-between items-center">
                 <span>{info.title}</span>
                 <div className="flex gap-2 items-center">
@@ -38,7 +38,7 @@ export default function PlaceInfo({ info, latitude, longitude, setDetailsModal, 
                         transition: { duration: .3 },
                     }}
                         whileTap={{ scale: 0.9 }}
-                        className=" bg-red-700 p-1 px-2 text-xs rounded-lg" onClick={() => { setDetailsModal(); setDisplayModal(false); setShowResults(true); }}><span className="material-symbols-outlined text-sm">close</span>
+                        className=" bg-red-700 p-1 px-2 text-xs rounded-lg" onClick={() => { setDetailsModal(); setDisplayModal(false); }}><span className="material-symbols-outlined text-sm">close</span>
                     </motion.span>
                 </div>
             </div>
@@ -120,7 +120,7 @@ export default function PlaceInfo({ info, latitude, longitude, setDetailsModal, 
                                 {info.contacts &&
                                     info.contacts[0].phone &&
                                     info.contacts[0].phone.map((phone) => {
-                                        return <div className="flex text-sm py-2 text-gray-300 gap-1 items-center">
+                                        return <div key={phone.value} className="flex text-sm py-2 text-gray-300 gap-1 items-center">
                                             <span className="material-symbols-outlined text-sm">phone</span>{phone.value}
                                         </div>
                                     })
@@ -128,7 +128,7 @@ export default function PlaceInfo({ info, latitude, longitude, setDetailsModal, 
                                 {info.contacts &&
                                     info.contacts[0].mobile &&
                                     info.contacts[0].mobile.map((phone) => {
-                                        return <div className="flex text-sm py-2 text-gray-300 gap-1 items-center">
+                                        return <div key={phone.value} className="flex text-sm py-2 text-gray-300 gap-1 items-center">
                                             <span className="material-symbols-outlined text-sm">phone</span>{phone.value}
                                         </div>
                                     })
@@ -137,8 +137,8 @@ export default function PlaceInfo({ info, latitude, longitude, setDetailsModal, 
 
                             {info.contacts &&
                                 info.contacts[0].www &&
-                                info.contacts[0].www.map((phone) => {
-                                    return <div className="flex py-2 text-gray-300 gap-1 text-xs items-center">
+                                info.contacts[0].www.map((phone, idx) => {
+                                    return <div key={idx} className="flex py-2 text-gray-300 gap-1 text-xs items-center">
                                         <span className="material-symbols-outlined text-sm">public</span>{phone.value}
                                     </div>
                                 })
