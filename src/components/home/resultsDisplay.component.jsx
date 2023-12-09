@@ -1,3 +1,4 @@
+import axios from "axios";
 import { calculateDistance } from "../../helpers/BrowseAPI.helper"
 
 export default function ResultDisplay({ items, latitude, longitude, search, setShowResults, clickPlace }) {
@@ -21,7 +22,7 @@ export default function ResultDisplay({ items, latitude, longitude, search, setS
                             :
                             ""
                         }
-                        <div className="flex text-xs px-2 py-1 border-green-500 border rounded-md items-center">5.0</div>
+                        <div className="flex text-xs px-2 py-1 border-green-500 border rounded-md items-center">Click here for ratings</div>
                         <div className="flex text-xs p-1 border-red-500 border rounded-md items-center cursor-pointer" onClick={(event) => { event.stopPropagation(); findDirections(items[restaurant].position.lat, items[restaurant].position.lng) }} style={{ borderRadius: "1rem" }}><span className="material-symbols-outlined">pin_drop</span></div>
                     </div>
                 </div>

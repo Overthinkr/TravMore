@@ -8,7 +8,8 @@ import DiscoverCard from "../components/discover/Card.component";
 export default function Discover() {
   const [footerHeight, setFooterHeight] = useState();
   const [wrapperWidth, setWrapperWidth] = useState();
-  const [wrapperHeight, setWrapperHeight] = useState();
+
+  const [places, setPlaces] = useState();
 
   const location = useContext(LocationContext);
 
@@ -20,18 +21,22 @@ export default function Discover() {
     }
     if (wrapper) {
       setWrapperWidth(wrapper.clientWidth);
-      setWrapperHeight(wrapper.clientHeight);
     }
   }, []);
 
+  const [currentCategory, setCurrentCategory] = useState("100-1000-0000");
+
   useEffect(() => {
     if (location?.latitude == null) return;
-    // axios.get(`https://browse.search.hereapi.com/v1/browse?at=${location.latitude},${location.longitude}&categories=100-1000-0000&limit=100&lang=en&apiKey=${import.meta.env.VITE_APIKEY}`).then((res) => {
-    //   console.log(res.data)
-    // })
-  }, [location]);
+    axios.get(`https://browse.search.hereapi.com/v1/browse?at=${location.latitude},${location.longitude}&categories=${currentCategory}&limit=100&lang=en&apiKey=${import.meta.env.VITE_APIKEY}`).then((res) => {
+  
+    setPlaces(res.data)
+    })
+  }, [currentCategory, location])
 
-  const bResponse = browseResponse;
+  function getPlaces(category) {
+    setCurrentCategory(category);
+  }
 
   const [currentShort, setCurrentShort] = useState(0);
 
@@ -44,7 +49,10 @@ export default function Discover() {
 
   useEffect(() => {
     const element = document.querySelector(`#data-id-${currentShort}`);
-    element.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
   }, [currentShort]);
 
   return (
@@ -58,29 +66,30 @@ export default function Discover() {
           className="absolute flex gap-2 my-2 ml-2 overflow-x-scroll location-tags-discover items-center"
           style={{ maxWidth: `${wrapperWidth}px` }}
         >
-          <LocationTag text={"Restaurants"} />
-          <LocationTag text={"Hotels"} />
-          <LocationTag text={"Fast Food"} />
-          <LocationTag text={"Shops"} />
-          <LocationTag text={"Shops"} />
-          <LocationTag text={"Shops"} />
-          <LocationTag text={"Shops"} />
-          <LocationTag text={"Shops"} />
+          <LocationTag text={"Restaurants"} fn={"100-1000-0000"} getPlaces={getPlaces} currentCategory={currentCategory} />
+          <LocationTag text={"Casual Dining"} fn={"100-1000-0001"} getPlaces={getPlaces} currentCategory={currentCategory} />
+          <LocationTag text={"Fine Dining"} fn={"100-1000-0002"} getPlaces={getPlaces} currentCategory={currentCategory} />
+          <LocationTag text={"Cafeteria"} fn={"100-1000-0007"} getPlaces={getPlaces} currentCategory={currentCategory} />
+          <LocationTag text={"Fast Food"} fn={"100-1000-0009"} getPlaces={getPlaces} currentCategory={currentCategory} />
+          <LocationTag text={"Bar"} fn={"200-2000-0011"} currentCategory={currentCategory} />
         </div>
         <div className="flex flex-col overflow-hidden">
-          {bResponse.map((responseData, index) => {
-            return (
-              <DiscoverCard
-                key={index}
-                ID={index}
-                locationData={responseData}
-                location={location}
-                wrapperHeight={wrapperHeight}
-                next={shortsNext}
-                before={shortsBefore}
-              />
-            );
-          })}
+          {places?.items ?
+            places.items.map((responseData, index) => {
+
+              return (
+                <DiscoverCard
+                  key={index}
+                  ID={index}
+                  locationData={responseData}
+                  location={location}
+                  footerHeight={footerHeight}
+                  next={shortsNext}
+                  before={shortsBefore}
+                />
+              );
+            }) :
+            ""}
         </div>
       </div>
     </div>

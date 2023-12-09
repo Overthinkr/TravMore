@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { calculateDistance } from "../../helpers/BrowseAPI.helper";
 
-export default function DiscoverCard({ locationData, location, wrapperHeight, ID, next, before }) {
+export default function DiscoverCard({ locationData, location, footerHeight, ID, next, before }) {
     const [showAddress, setShowAddress] = useState(false);
 
     return (
-        <div className="flex flex-col h-full justify-between bg-black" style={{ height: `${wrapperHeight}px`, minHeight: "-webkit-fill-available" }} id={`data-id-${ID}`}>
+        <div className="flex flex-col h-full justify-between bg-black" style={{ height: `calc(100vh - ${footerHeight}px)`, minHeight: "-webkit-fill-available" }} id={`data-id-${ID}`}>
             <div className="flex min-h-0 justify-center items-center bg-cover overflow-hidden">
                 <img src="https://source.unsplash.com/featured/?buckingham-palace" />
             </div>
@@ -16,12 +16,17 @@ export default function DiscoverCard({ locationData, location, wrapperHeight, ID
                         <span className="text-xs text-gray-800">{calculateDistance(parseFloat(locationData.position.lat), parseFloat(locationData.position.lng), location.latitude, location.longitude)} away</span>
                     </div>
 
-                    <span>5 Star Cuh</span>
+                    <span>{locationData.openingHours &&
+                        locationData.openingHours[0].isOpen === true ?
+                        <span className='border bg-green-500 p-1 px-2 rounded-lg text-xs'>Open</span>
+                        :
+                        <span className='bg-red-500 p-1 px-2 rounded-lg text-xs'>Closed</span>
+                    }</span>
                 </div>
 
                 <div className="flex text-xs gap-2">
-                    {locationData.foodTypes.map((type, idx) => {
-                        return <div key={idx} className="flex px-3 py-1 rounded-md" style={{ border: `2px solid #4169E1` }}>
+                    {locationData.categories.map((type, idx) => {
+                        return <div key={idx} className="flex px-3 py-1 rounded-md items-center self-center" style={{ border: `2px solid #4169E1` }}>
                             {type.name}
                         </div>
                     })}
