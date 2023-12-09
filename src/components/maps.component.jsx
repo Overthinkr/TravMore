@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import ResultDisplay from './home/resultsDisplay.component';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import { TimeCalculate, optionsHelper } from '../helpers/Home.helper';
+import { optionsHelper } from '../helpers/Home.helper';
+import PlaceInfo from './home/placeInfo.component';
 
 export default function MapElement({ latitude, longitude }) {
     const mapRef = useRef(null);
@@ -25,8 +26,17 @@ export default function MapElement({ latitude, longitude }) {
     const [searchLink, setLink] = useState("");
 
     const [routingEnabled, setRoutingEnabled] = useState(false);
+
+    const [detailsModal, setDetailsModal] = useState();
+    const [displayModal, setDisplayModal] = useState(false);
     // const [routingDest, setRoutingDest] = useState();
     // const [routingTime, setRoutingTime] = useState({});
+
+    function clickPlace(info) {
+        setDisplayModal(true)
+        setShowResults(false);
+        setDetailsModal(info)
+    }
 
     function searchArea() {
         if (searchLink === "") return;
@@ -225,7 +235,7 @@ export default function MapElement({ latitude, longitude }) {
                             <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(80vh - 8rem)", maxWidth: "500px" }}>
                                 {
                                     restaurants &&
-                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude} search={search} setShowResults={setShowResults} />
+                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude} search={search} setShowResults={setShowResults} clickPlace={clickPlace} />
                                 }
                             </div>
                         }
@@ -242,6 +252,11 @@ export default function MapElement({ latitude, longitude }) {
                         } */}
 
                     </div>
+                }
+
+                {
+                    displayModal &&
+                    <PlaceInfo info={detailsModal} findDirections={search} latitude={latitude} longitude={longitude} setDisplayModal={setDisplayModal} setDetailsModal={setDetailsModal} setShowResults={setShowResults} />
                 }
 
 
