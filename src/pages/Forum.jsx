@@ -24,8 +24,12 @@ export default function Forum() {
   const [searchbutton, setSearchbutton] = useState(false);
   const [search, setSearch] = useState("");
 
+  const addbutton = () => {
+    console.log("Add button clicked");
+  };
+
   return (
-    <div className="flex flex-col gap-7 items-center mx-6 overflow-y-scroll overflow-x-hidden">
+    <div className="flex flex-col gap-7 items-center mx-auto  overflow-hidden max-w-2xl w-full align-middle justify-center">
       <div className="flex flex-row items-center w-full justify-between">
         <button
           className="rounded-2xl bg-black flex"
@@ -33,7 +37,7 @@ export default function Forum() {
         >
           <span className="material-symbols-outlined">search</span>
         </button>
-        <button className="w-[80%] rounded-2xl bg-black">
+        <button className="w-[80%] rounded-2xl bg-black" onClick={addbutton}>
           + Add new query
         </button>
       </div>
@@ -54,38 +58,24 @@ export default function Forum() {
           />
         </div>
       )}
-      <div className="flex overflow-x-scroll w-full gap-2 max-h-8">
-        <a className="bg-black rounded-xl p-1 px-3 min-w-max">
-          <p>Restaurants</p>
-        </a>
-        <a className="bg-black rounded-xl p-1 px-3 min-w-max">
-          <p>Hotels</p>
-        </a>
-        <a className="bg-black rounded-xl p-1 px-3 min-w-max">
-          <p>Fast-Food</p>
-        </a>
-        <a className="bg-black rounded-xl p-1 px-3 min-w-max">
-          <p>Shops</p>
-        </a>
-        <a className="bg-black rounded-xl p-1 px-3 min-w-max">
-          <p>Restaurants</p>
-        </a>
-        <a className="bg-black rounded-xl p-1 px-3 min-w-max">
-          <p>Restaurants</p>
-        </a>
-        <a className="bg-black rounded-xl p-1 px-3 min-w-max">
-          <p>Restaurants</p>
-        </a>
-      </div>
-      {forumcards.map((forumcard) => (
-        <ForumCard
-          key={forumcard.id}
-          title={forumcard.title}
-          description={forumcard.description}
-          date={forumcard.date}
-          user={forumcard.user}
-        />
-      ))}
+      {forumcards.map((forumcard) => {
+        if (
+          forumcard.title.toLowerCase().includes(search.toLowerCase()) ||
+          forumcard.description.toLowerCase().includes(search.toLowerCase()) ||
+          forumcard.user.toLowerCase().includes(search.toLowerCase()) ||
+          forumcard.date.toLowerCase().includes(search.toLowerCase())
+        ) {
+          return (
+            <ForumCard
+              key={forumcard.id}
+              title={forumcard.title}
+              description={forumcard.description}
+              date={forumcard.date}
+              user={forumcard.user}
+            />
+          );
+        }
+      })}
     </div>
   );
 }

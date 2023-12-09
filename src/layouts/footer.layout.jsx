@@ -17,12 +17,12 @@ export default function Footer() {
           >
             <span className="material-symbols-outlined">home</span>Home
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to="/companion"
             className="flex flex-col items-center cursor-pointer text-cyan-300 hover:text-white"
           >
             <span className="material-symbols-outlined">robot_2</span>Companion
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to="/discover"
             className="flex flex-col items-center cursor-pointer text-cyan-300 hover:text-white"

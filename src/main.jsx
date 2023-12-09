@@ -3,7 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import "./index.css";
 import Layout from "./layouts/footer.layout";
 import Home from "./pages/Home";
-import Companion from "./pages/Companion";
+// import Companion from "./pages/Companion";
 import Discover from "./pages/Discover";
 import Invest from "./pages/Invest";
 import Profile from "./pages/Profile";
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/companion", element: <Companion /> },
+      // { path: "/companion", element: <Companion /> },
       { path: "/discover", element: <Discover /> },
       { path: "/invest", element: <Invest /> },
       { path: "/profile", element: <Profile /> },

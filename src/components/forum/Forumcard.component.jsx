@@ -1,6 +1,6 @@
 export default function ForumCard({ title, description, date, user }) {
   return (
-    <div className="flex justify-between align-middle gap-3 bg-slate-900 p-4 drop-shadow-2xl rounded-xl">
+    <div className="flex justify-between align-middle gap-3 bg-slate-900 p-4 drop-shadow-xl rounded-xl">
       <div>
         <p className="text-xs">{user}</p>
         <h2 className="font-bold text-lg">{title}</h2>
