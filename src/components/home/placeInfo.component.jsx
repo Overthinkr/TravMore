@@ -49,7 +49,7 @@ export default function PlaceInfo({ info, latitude, longitude, setDetailsModal, 
 
             <div className="flex gap-2 py-2 text-xs text-gray-400">
                 {info.categories.map((item, idx) => {
-                    return <span className='border border-gray-400 p-1 px-2 rounded-lg' key={idx}>{item.name}</span>
+                    return <span className='border border-gray-400 p-1 px-2 rounded-lg items-center self-center' key={idx}>{item.name}</span>
                 })}
             </div>
             <div className="flex text-sm py-2 text-gray-400">

@@ -79,7 +79,6 @@ export default function MapElement({ latitude, longitude }) {
 
     const onResult = function (result) {
         if (result.routes.length) {
-            console.log(result)
             const lineStrings = [];
             result.routes[0].sections.forEach((section) => {
                 lineStrings.push(H.geo.LineString.fromFlexiblePolyline(section.polyline));

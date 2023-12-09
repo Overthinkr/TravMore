@@ -30,7 +30,6 @@ export function TimeCalculate(timeString1, timeString2) {
     
 
     const timeDifferenceMillis = Math.abs(date2.getTime() - date1.getTime());
-    console.log((date1.getTime() - date2.getTime()) / 1000)
 
     const minutesDifference = Math.floor(timeDifferenceMillis / (1000 * 60));
     const hoursDifference = Math.floor(timeDifferenceMillis / (1000 * 60 * 60));
@@ -44,8 +43,6 @@ export function TimeCalculate(timeString1, timeString2) {
         difference = hoursDifference;
         unit = "hours";
     }
-    console.log(minutesDifference)
-    console.log(difference)
 
     return `${difference} ${unit}`;
 }
