@@ -1,10 +1,3 @@
-import axios from "axios";
-import {
-  motion,
-  useMotionValue,
-  useTransform,
-  useAnimation,
-} from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import { LocationContext } from "../contexts/locationContext.context";
 import LocationTag from "../components/discover/LocationTag.component";
@@ -77,7 +70,7 @@ export default function Discover() {
         <div className="flex flex-col overflow-hidden">
           {
             bResponse.map((responseData, index) => {
-              return <DiscoverCard key={index} ID={index} locationData={responseData} location={location} wrapperHeight={wrapperHeight} next={shortsNext} before = {shortsBefore} />
+              return <DiscoverCard key={index} ID={index} locationData={responseData} location={location} wrapperHeight={wrapperHeight} next={shortsNext} before={shortsBefore} />
             })
           }
         </div>

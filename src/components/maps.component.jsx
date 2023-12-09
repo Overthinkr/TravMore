@@ -4,6 +4,9 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import RestIcon from "../assets/restaurant-icon.svg";
 import { motion } from "framer-motion";
 import ResultDisplay from './home/resultsDisplay.component';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+import { optionsHelper } from '../helpers/Home.helper';
 
 export default function MapElement({ latitude, longitude }) {
     const mapRef = useRef(null);
@@ -11,6 +14,7 @@ export default function MapElement({ latitude, longitude }) {
     const platform = useRef(null);
 
     const restaurantGroup = useRef(null);
+    const routingGroup = useRef(null);
 
     const apikey = "L0-2LCY4n1A2kedFrMAlPVsd9bjfFL9RmaA-JTv-Sgg";
 
@@ -18,9 +22,14 @@ export default function MapElement({ latitude, longitude }) {
 
     const [showResults, setShowResults] = useState(false);
 
+    const [searchLink, setLink] = useState("");
+
+    const [routingEnabled, setRoutingEnabled] = useState(false);
+
     function searchArea() {
+        if (searchLink === "") return;
         const { lat, lng } = map.current.getCenter()
-        axios.get(`https://browse.search.hereapi.com/v1/browse?at=${lat},${lng}&limit=100&categories=100-1000-0000&apiKey=${apikey}`).then((res) => {
+        axios.get(`https://browse.search.hereapi.com/v1/browse?at=${lat},${lng}&limit=100&categories=${searchLink}&apiKey=${apikey}`).then((res) => {
 
             setRestaurants((x) => {
                 if (x) {
@@ -41,12 +50,71 @@ export default function MapElement({ latitude, longitude }) {
 
     function clearRestaurants() {
         setRestaurants();
-        console.log(restaurantGroup.current)
         map.current.removeObject(restaurantGroup.current);
         restaurantGroup.current = new H.map.Group();
         map.current.addObject(restaurantGroup.current);
     }
 
+    function clearRoute() {
+        map.current.removeObject(routingGroup.current);
+        setRoutingEnabled(false);
+    }
+
+    const router = platform.current?.getRoutingService(null, 8);
+
+
+    var destination = { lat: latitude, lng: longitude };
+
+    const onResult = function (result, lat, lng) {
+        if (result.routes.length) {
+            const lineStrings = [];
+            result.routes[0].sections.forEach((section) => {
+                lineStrings.push(H.geo.LineString.fromFlexiblePolyline(section.polyline));
+            });
+
+            const multiLineString = new H.geo.MultiLineString(lineStrings);
+
+            const routeLine = new H.map.Polyline(multiLineString, {
+                style: {
+                    strokeColor: 'blue',
+                    lineWidth: 3
+                }
+            });
+
+            const startMarker = new H.map.Marker({ lat: latitude, lng: longitude });
+
+            const endMarker = new H.map.Marker(destination);
+
+            routingGroup.current = new H.map.Group();
+            routingGroup.current.addObjects([routeLine, startMarker, endMarker]);
+
+            map.current.addObject(routingGroup.current);
+
+            map.current.getViewModel().setLookAtData({
+                bounds: routingGroup.current.getBoundingBox()
+            });
+
+            setRoutingEnabled(true);
+        };
+    };
+
+    function search(searchLat, searchLng) {
+        if (routingEnabled) {
+            clearRoute();
+        }
+        const routingParameters = {
+            'routingMode': 'fast',
+            'transportMode': 'car',
+            'origin': `${latitude},${longitude}`,
+            'destination': `${searchLat},${searchLng}`,
+            'return': 'polyline',
+        };
+        destination = { lat: searchLat, lng: searchLng }
+        router.calculateRoute(routingParameters, onResult,
+            function (error) {
+                alert(error.message);
+            });
+    }
     useEffect(
         () => {
             if (!latitude) return;
@@ -58,9 +126,13 @@ export default function MapElement({ latitude, longitude }) {
                 const newMap = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
                     center: { lat: latitude, lng: longitude },
                     zoom: 16,
+                    padding: { top: 50, right: 50, bottom: 50, left: 50 },
                     pixelRatio: window.devicePixelRatio || 1
                 });
 
+                var ui = H.ui.UI.createDefault(newMap, defaultLayers);
+
+                window.addEventListener('resize', () => newMap.getViewPort().resize());
                 var currentLocation = new H.map.Circle({ lat: latitude, lng: longitude }, 10);
                 newMap.addObject(currentLocation);
                 var currentLocation = new H.map.Circle({ lat: latitude, lng: longitude }, 125);
@@ -91,18 +163,31 @@ export default function MapElement({ latitude, longitude }) {
 
     }, [restaurants])
 
-    const [categories, setCategories] = useState();
+    const options = optionsHelper;
 
     return (
         <Fragment>
             <motion.div
-                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2 overflow-hidden" style={{ maxHeight: "80vh" }}>
-                <div className="flex gap-2">
-                    <motion.span className="bg-black p-3 rounded-xl mt-4" onClick={searchArea} whileHover={{
+                className="absolute flex flex-col items-center select-none cursor-pointer z-10 gap-2" style={{ maxHeight: "80vh" }}>
+                <div className="flex gap-2 mt-3 items-center">
+                    <Dropdown options={options} onChange={(e) => { setLink(e.value) }} placeholder="Category" />
+
+
+                    <motion.span className="flex bg-black p-3 rounded-xl items-center" onClick={searchArea} whileHover={{
                         scale: 1.05,
                         transition: { duration: .3 },
                     }}
-                        whileTap={{ scale: 0.9 }}>Search This Area</motion.span>
+                        whileTap={{ scale: 0.9 }}><span class="material-symbols-outlined">search</span></motion.span>
+                    {
+                        routingEnabled &&
+                        <motion.span whileHover={{
+                            scale: 1.05,
+                            transition: { duration: .3 },
+                        }}
+                            whileTap={{ scale: 0.9 }}
+                            className=" bg-red-700 px-4 py-2 rounded-xl" onClick={clearRoute}>Clear Route
+                        </motion.span>
+                    }
                 </div>
 
                 {
@@ -124,7 +209,7 @@ export default function MapElement({ latitude, longitude }) {
                                 transition: { duration: .3 },
                             }}
                                 whileTap={{ scale: 0.9 }}
-                                className="bg-black p-3 rounded-xl" onClick={clearRestaurants}>X
+                                className=" bg-red-700 px-4 py-2 rounded-xl" onClick={clearRestaurants}>Clear
                             </motion.span>
                         </div>
 
@@ -136,7 +221,7 @@ export default function MapElement({ latitude, longitude }) {
                             <div className="flex flex-col bg-black p-2 rounded-lg overflow-auto" style={{ maxHeight: "calc(80vh - 8rem)", maxWidth: "500px" }}>
                                 {
                                     restaurants &&
-                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude}/>
+                                    <ResultDisplay items={restaurants} latitude={latitude} longitude={longitude} search={search} setShowResults={setShowResults} />
                                 }
                             </div>
                         }
