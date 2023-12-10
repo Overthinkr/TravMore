@@ -9,8 +9,6 @@ export default function Forum() {
 
   const [addQueryModal, setAddQueryModal] = useState(false);
 
-  console.log(forumcards);
-
   useEffect(() => {
     axios
       .get(`https://travmoreapi.up.railway.app/get_forum_queries`)
@@ -18,28 +16,11 @@ export default function Forum() {
         if (res) {
           setForumcards(res.data);
         }
-
-        console.log(forumcards);
       })
       .catch((error) => {
         console.error("Error fetching forum data:", error);
       });
   }, []);
-
-  const addbutton = () => {
-    axios
-      .get(`https://travmoreapi.up.railway.app/add_forum_query?query_title=%60&query_text=%60&category=%60`)
-      .then((res) => {
-        if (res) {
-          setForumcards(res.data);
-        }
-
-        console.log(forumcards);
-      })
-      .catch((error) => {
-        console.error("Error fetching forum data:", error);
-      });
-  };
 
   const TitleRef = useRef();
   const DescRef = useRef();
@@ -47,47 +28,64 @@ export default function Forum() {
 
   const [categoriesList, setCategoriesList] = useState([]);
 
+  const addbutton = () => {
+    const category = categoriesList.join(',');
+    axios
+      .post(`https://travmoreapi.up.railway.app/add_forum_query?query_title=${TitleRef.current.value}&query_text=${DescRef.current.value}&category=${category}`)
+      .then((res) => {
+        console.log(res.data)
+        setAddQueryModal(false);
+        setForumcards((x) => [...x, res.data])
+      })
+      .catch((error) => {
+        console.error("Error fetching forum data:", error);
+      });
+  };
+
+
+
   return (
     <>
       {
         addQueryModal &&
         <div className="absolute z-10 flex w-full h-screen overlay justify-center items-center">
-          <div className="flex flex-col p-2 gap-4 items-center bg-slate-900 w-fit p-4 rounded-lg">
-              <div className="flex text-lg items-center">
-                Add a query!
-              </div>
-              <div className="flex gap-2 items-center w-[250px]">
-                <input className="p-2 rounded-lg outline-none text-sm w-full" placeholder={"Enter the Title here..."} ref={TitleRef}/>
-              </div>
-              <div className="flex flex-col gap-2 items-center w-full">
-                <div className="flex">Content</div>
-                <textarea className="p-2 rounded-lg outline-none text-sm w-full" ref={DescRef}/>
-              </div>
-              <div className="flex gap-2 items-center w-[250px]">
-                <input className="p-2 rounded-lg outline-none text-sm w-full" placeholder={"Enter the Categories here..."} ref={CategoryRef}/>
-                <span className="material-symbols-outlined p-2 bg-red-500 rounded-xl" onClick={() => setCategoriesList((x) => {
-                  return [...x, CategoryRef.current.value];
-                })}>add</span>
-              </div>
-              <div className="flex gap-2">
-                {
-                  categoriesList?.map((cate, idx) =>{
-                    return <div key={idx} className="flex gap-2 px-3 rounded-lg py-1 text-sm bg-blue-500" onClick={() => {
-                      setCategoriesList((x) => {
-                        let temp = [...x]
+          <div className="flex flex-col gap-4 items-center bg-slate-900 w-fit p-4 rounded-lg">
+            <div className="flex text-lg items-center justify-between w-full">
+              Add a query!
+              <span className="material-symbols-outlined text-sm bg-red-500 p-2 rounded-lg">close</span>
+            </div>
+            <div className="flex gap-2 items-center w-[250px]">
+              <input className="p-2 rounded-lg outline-none text-sm w-full" placeholder={"Enter the Title here..."} ref={TitleRef} />
+            </div>
+            <div className="flex flex-col gap-2 items-center w-full">
+              <div className="flex">Content</div>
+              <textarea className="p-2 rounded-lg outline-none text-sm w-full" ref={DescRef} />
+            </div>
+            <div className="flex gap-2 items-center w-[250px]">
+              <input className="p-2 rounded-lg outline-none text-sm w-full" placeholder={"Enter the Categories here..."} ref={CategoryRef} />
+              <span className="material-symbols-outlined p-2 bg-red-500 rounded-xl" onClick={() => setCategoriesList((x) => {
+                return [...x, CategoryRef.current.value];
+              })}>add</span>
+            </div>
+            <div className="flex gap-2">
+              {
+                categoriesList?.map((cate, idx) => {
+                  return <div key={idx} className="flex gap-2 px-3 rounded-lg py-1 text-sm bg-blue-500" onClick={() => {
+                    setCategoriesList((x) => {
+                      let temp = [...x]
 
-                        return temp.slice(idx)
-                      })
-                    }}>
-                      {cate}
-                    </div>
-                  })
-                }
-              </div>
-              <div className="flex text-xs text-gray-600">
-                Click the tag to remove it
-              </div>
-              <button>Add Query</button>
+                      return temp.slice(idx, 1)
+                    })
+                  }}>
+                    {cate}
+                  </div>
+                })
+              }
+            </div>
+            <div className="flex text-xs text-gray-600">
+              Click the tag to remove it
+            </div>
+            <button onClick={addbutton}>Add Query</button>
           </div>
         </div>
       }
