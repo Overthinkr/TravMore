@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ForumCard from "../components/forum/Forumcard.component";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Forum() {
   const [searchbutton, setSearchbutton] = useState(false);
@@ -8,6 +9,8 @@ export default function Forum() {
   const [forumcards, setForumcards] = useState([]);
 
   const [addQueryModal, setAddQueryModal] = useState(false);
+
+  const router = useNavigate();
 
   useEffect(() => {
     axios
@@ -33,26 +36,98 @@ export default function Forum() {
     axios
       .post(`https://travmoreapi.up.railway.app/add_forum_query?query_title=${TitleRef.current.value}&query_text=${DescRef.current.value}&category=${category}`)
       .then((res) => {
-        console.log(res.data)
         setAddQueryModal(false);
-        setForumcards((x) => [...x, res.data])
+        router(0)
       })
       .catch((error) => {
         console.error("Error fetching forum data:", error);
       });
   };
 
+  const [cardpressed, setCardpressed] = useState(false);
+  const [cardData, setCardData] = useState();
+  const [replyData, setReplyData] = useState([]);
+  const [replying, setReplying] = useState(false);
 
+  const replyRef = useRef();
+
+  function addReply() {
+    axios.post(`https://travmoreapi.up.railway.app/add_forum_reply?queryID=${cardData.id}&reply_text=${replyRef.current.value}`).then((res) => {
+      setAddQueryModal(false);
+      router(0)
+    })
+      .catch((error) => {
+        console.error("Error fetching forum data:", error);
+      });
+
+  }
 
   return (
     <>
+      {cardpressed && (
+        <div className="fixed flex overlay z-30 w-full h-full justify-center items-center">
+          <div className="w-[350px] gap-2 p-4 bg-slate-900 rounded-lg overflow-y-scroll flex flex-col">
+            <div className="flex flex-row justify-between text-xl">
+              <p>Title: {cardData?.title}</p>
+              <span
+                className="material-symbols-outlined"
+                onClick={() => setCardpressed(false)}
+              >
+                close
+              </span>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p>{cardData?.description}</p>
+            </div>
+            <div className="flex flex-col justify-center w-full gap-4">
+              <button
+                className="rounded-2xl bg-black self-center"
+                onClick={() => setReplying(true)}
+              >
+                + Add reply
+              </button>
+              {replying && (
+                <div className="flex flex-col gap-4 align-middle justify-center text-center">
+                  <textarea
+                    ref={replyRef}
+                    type="text"
+                    placeholder="Type your reply here..."
+                    className="rounded-2xl bg-white border-2 border-black p-2 px-4 text-black"
+                  />
+                  <button
+                    className="rounded-2xl bg-black"
+                    onClick={addReply}
+                  >
+                    Submit
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-4 text-sm">
+            {replyData.map((reply) => (
+              <div
+                key={reply.id}
+                className="flex flex-col gap-3 align-middle justify-center border p-2 rounded-xl"
+              >
+                <div className="flex w-full justify-between">
+                  <span>{reply.UserID}</span>
+                  <span>{reply.ReplyDate}</span>
+                </div>
+                <p>{reply.ReplyText}</p>
+              </div>
+            ))}
+            </div>
+            
+          </div>
+        </div>
+      )}
       {
         addQueryModal &&
         <div className="absolute z-10 flex w-full h-screen overlay justify-center items-center">
           <div className="flex flex-col gap-4 items-center bg-slate-900 w-fit p-4 rounded-lg">
             <div className="flex text-lg items-center justify-between w-full">
               Add a query!
-              <span className="material-symbols-outlined text-sm bg-red-500 p-2 rounded-lg">close</span>
+              <span className="material-symbols-outlined text-sm bg-red-500 p-2 rounded-lg" onClick={() => {setAddQueryModal(false)}}>close</span>
             </div>
             <div className="flex gap-2 items-center w-[250px]">
               <input className="p-2 rounded-lg outline-none text-sm w-full" placeholder={"Enter the Title here..."} ref={TitleRef} />
@@ -133,6 +208,10 @@ export default function Forum() {
                 description={forumcard.QueryText}
                 date={forumcard.QueryDate}
                 user={forumcard.UserID}
+                setCardpressed={setCardpressed}
+                setCardData={setCardData}
+                setReplyData={setReplyData}
+                cardpressed={cardpressed}
               />
             );
           }
