@@ -13,9 +13,13 @@ TravMore is a cutting-edge travel and exploration web application designed to en
 
 ## Key Features
 
+### TravMore API
+A custom API was designed using FASTAPI to set and view reviews, ratings, forum queries and forum replies.
+- [github link](https://github.com/DineshK-1/TravMoreAPI) for the API
+
 ### Interactive Maps with HERE Maps API
 
-TravMore integrates seamlessly with the HERE Maps API, providing a visually stunning and responsive map background. Whether you're planning your itinerary or exploring a new city, our maps offer a dynamic and immersive experience.
+TravMore integrates seamlessly with the HERE Maps API, providing a visually responsive map background. Our maps offer the perfect experience for exploring businesses, locations and tourist spots in and around your location.
 
 ### Explore and Discover
 
@@ -30,3 +34,11 @@ TravMore integrates seamlessly with the HERE Maps API, providing a visually stun
 5. **Investment Opportunities:** Users can invest in handpicked locations and have a chance to contribute to their growth. Receive incentives upon visiting and supporting these locations.
 
 6. **Community Forum:** Engage with the TravMore community on the Forum. Find answers to your travel-related quest
+
+## How to Run
+1. Access the website travmore.netlify.app
+2. To test all the functionalities locally :
+   --npm install
+   --npm run dev
+   --add VITE_APIKEY=L0-2LCY4n1A2kedFrMAlPVsd9bjfFL9RmaA-JTv-Sgg to .env file
+3. TravMoreAPI cannot be tested locally due to our connections string being exposed.
