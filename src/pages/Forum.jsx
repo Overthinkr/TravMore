@@ -1,35 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ForumCard from "../components/forum/Forumcard.component";
+import axios from "axios";
 
 export default function Forum() {
-  let forumcards = [
-    {
-      id: 1,
-      title: "Nature",
-      description:
-        "Nature soothes the soul. It has the power to heal and rejuvenate.",
-      date: "09-12-2023",
-      user: "Mayank",
-    },
-    {
-      id: 2,
-      title: "Nature",
-      description:
-        "Nature soothes the soul. It has the power to heal and rejuvenate.",
-      date: "09-12-2023",
-      user: "Dinesh",
-    },
-  ];
-
   const [searchbutton, setSearchbutton] = useState(false);
   const [search, setSearch] = useState("");
+  const [forumcards, setForumcards] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`https://travmoreapi.up.railway.app/get_forum_queries`)
+      .then((res) => {
+        setForumcards(res.data);
+        console.log(forumcards);
+      })
+      .catch((error) => {
+        console.error("Error fetching forum data:", error);
+      });
+  }, []);
 
   const addbutton = () => {
     console.log("Add button clicked");
   };
 
   return (
-    <div className="flex flex-col gap-7 items-center mx-auto  overflow-hidden max-w-2xl w-full align-middle justify-center mt-14">
+    <div className="flex flex-col gap-7 items-center mx-auto overflow-hidden max-w-2xl w-full align-middle justify-center mt-14">
       <div className="flex flex-row items-center w-full justify-between">
         <button
           className="rounded-2xl bg-black flex"
@@ -68,6 +63,7 @@ export default function Forum() {
           return (
             <ForumCard
               key={forumcard.id}
+              id={forumcard.id}
               title={forumcard.title}
               description={forumcard.description}
               date={forumcard.date}
@@ -75,6 +71,7 @@ export default function Forum() {
             />
           );
         }
+        return null;
       })}
     </div>
   );
