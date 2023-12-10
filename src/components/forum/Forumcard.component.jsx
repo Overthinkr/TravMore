@@ -27,7 +27,7 @@ export default function ForumCard({ id, title, description, date, user }) {
   return (
     <>
       <div
-        className="flex justify-between align-middle gap-3 bg-slate-900 p-4 drop-shadow-xl rounded-xl"
+        className="flex justify-between align-middle gap-3 bg-slate-900 p-4 drop-shadow-xl rounded-xl w-full"
         onClick={() => setCardpressed(true)}
       >
         <div>
