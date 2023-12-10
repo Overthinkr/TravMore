@@ -11,7 +11,10 @@ export default function Forum() {
     axios
       .get(`https://travmoreapi.up.railway.app/get_forum_queries`)
       .then((res) => {
-        setForumcards(res.data);
+        if(res){
+          setForumcards(res.data);
+        }
+        
         console.log(forumcards);
       })
       .catch((error) => {
@@ -55,10 +58,10 @@ export default function Forum() {
       )}
       {forumcards.map((forumcard) => {
         if (
-          forumcard.title.toLowerCase().includes(search.toLowerCase()) ||
-          forumcard.description.toLowerCase().includes(search.toLowerCase()) ||
-          forumcard.user.toLowerCase().includes(search.toLowerCase()) ||
-          forumcard.date.toLowerCase().includes(search.toLowerCase())
+          forumcard?.title.toLowerCase().includes(search.toLowerCase()) ||
+          forumcard?.description.toLowerCase().includes(search.toLowerCase()) ||
+          forumcard?.user.toLowerCase().includes(search.toLowerCase()) ||
+          forumcard?.date.toLowerCase().includes(search.toLowerCase())
         ) {
           return (
             <ForumCard

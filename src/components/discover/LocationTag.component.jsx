@@ -1,5 +1,5 @@
 export default function LocationTag({ text, fn, getPlaces, currentCategory }) {
-    console.log(fn === currentCategory)
+    
     return (
         <div onClick={() => {
             getPlaces(fn);

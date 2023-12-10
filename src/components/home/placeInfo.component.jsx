@@ -36,8 +36,6 @@ export default function PlaceInfo({ info, latitude, longitude, setDetailsModal, 
         })
     }, [])
 
-    console.log(currentReviews)
-
     function submitRating() {
         if (rating === 0) return;
         setRatingSubmit(1);
